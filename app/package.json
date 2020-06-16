@@ -1,0 +1,21 @@
+{
+  "name": "sample-cert-manager-app",
+  "version": "1.0.0",
+  "author": "Luc Desrosiers",
+  "license": "Apache-2.0",
+  "repository": "https://github.com/ldesrosi/sample-cert-manager-app",
+  "description": "A sample web app relying on TLS cert being mounted on the file system.",
+  "main": "app.js",
+  "scripts": {
+    "start": "node ./src/app.js"
+  },
+  "keywords": [
+    "cert-manager sample app"
+  ],
+  "engines": {
+    "node": ">=10.15.3 <11.0"
+  },
+  "dependencies": {
+    "express": "^4.15.2"
+  }
+}

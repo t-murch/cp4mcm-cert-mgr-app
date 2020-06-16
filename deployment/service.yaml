@@ -1,0 +1,18 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: sample-cm-app 
+    release: sample-cm-app 
+  name: sample-cm-svc
+spec:
+  ports:
+  - name: service
+    port: 8000
+    protocol: TCP
+  selector:
+    app: sample-cm-app 
+    release: sample-cm-app
+  sessionAffinity: None
+  type: ClusterIP
