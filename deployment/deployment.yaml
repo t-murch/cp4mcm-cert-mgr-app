@@ -2,15 +2,17 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: sample-cm-app 
-    release: sample-cm-app 
+    app: sample-cm-app
+    release: sample-cm-app
   name: sample-cm-app-deployment
+  annotations:
+    certmanager.k8s.io/disable-auto-restart: "true"
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: sample-cm-app 
-      release: sample-cm-app 
+      app: sample-cm-app
+      release: sample-cm-app
   strategy:
     rollingUpdate:
       maxSurge: 100%
@@ -19,50 +21,49 @@ spec:
   template:
     metadata:
       labels:
-        app: sample-cm-app 
-        release: sample-cm-app 
-      name: sample-cm-app 
+        app: sample-cm-app
+        release: sample-cm-app
+      name: sample-cm-app
     spec:
       volumes:
-      - name: tls
-        secret: 
-          secretName: sample-cm-deployment-tls
-      containers:
-      - image: docker.io/ldesrosi/sample-cm-app:latest
-        imagePullPolicy: IfNotPresent
-        name: sample-cm-app
-        ports:
-        - containerPort: 8000
-          name: service
-          protocol: TCP
-        resources:
-          limits:
-            cpu: 500m
-            memory: 512Mi
-          requests:
-            cpu: 250m
-            memory: 128Mi
-        volumeMounts:
         - name: tls
-          mountPath: /config
-        readinessProbe:
-          failureThreshold: 3
-          httpGet:
-            path: /
-            port: service
-            scheme: HTTPS
-          initialDelaySeconds: 5
-          periodSeconds: 15
-          successThreshold: 1
-          timeoutSeconds: 1
-        livenessProbe:
-          failureThreshold: 3
-          httpGet:
-            path: /
-            port: service
-            scheme: HTTPS
-          initialDelaySeconds: 5
-          periodSeconds: 30
-          successThreshold: 1
-          timeoutSeconds: 1
-
+          secret:
+            secretName: sample-cm-deployment-tls
+      containers:
+        - image: docker.io/ldesrosi/sample-cm-app:latest
+          imagePullPolicy: IfNotPresent
+          name: sample-cm-app
+          ports:
+            - containerPort: 8000
+              name: service
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 500m
+              memory: 512Mi
+            requests:
+              cpu: 250m
+              memory: 128Mi
+          volumeMounts:
+            - name: tls
+              mountPath: /config
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: service
+              scheme: HTTPS
+            initialDelaySeconds: 5
+            periodSeconds: 15
+            successThreshold: 1
+            timeoutSeconds: 1
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: service
+              scheme: HTTPS
+            initialDelaySeconds: 5
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 1
